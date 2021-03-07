@@ -14,14 +14,14 @@ function tableLog(name, values) {
   console.table(values);
 }
 
-export default function print(elements) {
+function print(elements) {
   if (!(elements instanceof Object))
     throw TypeError(errorMessage(typeof elements));
 
   forEachObject(elements, (name, value) => log(name, value));
 }
 
-export function prettyPrint(elements) {
+function prettyPrint(elements) {
   if (!(elements instanceof Object))
     throw TypeError(errorMessage(typeof elements));
 
@@ -40,3 +40,5 @@ const nums = [1, 2, 3, 4, 5];
 
 print({ num, word, person, people, nums });
 prettyPrint({ num, word, person, people, nums });
+
+export { print as default, prettyPrint };
