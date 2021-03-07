@@ -14,22 +14,47 @@ function tableLog(name, values) {
   console.table(values);
 }
 
-function print(elements) {
-  if (!(elements instanceof Object))
-    throw TypeError(errorMessage(typeof elements));
-
-  forEachObject(elements, (name, value) => log(name, value));
+function logBasedOnType(name, value) {
+  Array.isArray(value) || value instanceof Object
+    ? tableLog(name, value)
+    : log(name, value);
 }
 
-function prettyPrint(elements) {
+function addMetadataCollapsedGroup() {
+  console.groupCollapsed("Metadata");
+  console.log("current time:", new Date().toISOString());
+  console.groupEnd();
+}
+
+function groupContent(elements, title, consoleLogCallback) {
+  const elementNames = Object.keys(elements);
+
+  if (elementNames.length > 1) {
+    console.group(title ?? elementNames.join(", "));
+
+    consoleLogCallback();
+    addMetadataCollapsedGroup();
+
+    console.groupEnd();
+  } else {
+    consoleLogCallback();
+  }
+}
+
+function print(elements, title) {
   if (!(elements instanceof Object))
     throw TypeError(errorMessage(typeof elements));
 
-  forEachObject(elements, (name, value) =>
-    Array.isArray(value) || value instanceof Object
-      ? tableLog(name, value)
-      : log(name, value)
+  groupContent(elements, title, () =>
+    forEachObject(elements, (name, value) => log(name, value))
   );
+}
+
+function prettyPrint(elements, title) {
+  if (!(elements instanceof Object))
+    throw TypeError(errorMessage(typeof elements));
+
+  groupContent(elements, title, () => forEachObject(elements, logBasedOnType));
 }
 
 export { print as default, prettyPrint };
