@@ -6,6 +6,8 @@ Use these `print` and `prettyPrint` functions instead and save yourself the repe
 ## Example
 
 ```js
+import print, { prettyPrint } from './src'
+
 const num = 10;
 const word = "I'm a string";
 const person = { name: "Ramin", age: 28 };
